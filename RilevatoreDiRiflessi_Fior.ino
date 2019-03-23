@@ -1,14 +1,6 @@
 int TempoBuzzer;
 int TempoLed;
 
-//stati dei bottoni
-
-int StatoBottoneBuzzer = LOW; // stato bottone buzzer
-int StatoBottoneStart = LOW; // stato bottone Start
-int StatoBottoneLed = LOW; // stato bottone led 
-int StatoBuzzer = LOW; // stato buzzer 
-int StatoLed = HIGH; //stato led 
-
 //variabili che danno il tempo (random) che accendano il led ed il buzzer
 
 int CreazioneTempoAccensioneLed; 
@@ -22,12 +14,9 @@ int BLU;
 int ROSSO;
 int ledblu;
 
-
-
-
 void setup(){
 
-  //pin a cui sarà collegato i pulsanti, buzzer ed i led 
+//pin a cui sarà collegato i pulsanti, buzzer ed i led 
 int StatoBottoneStart = 1;
 int StatoBottoneLed = 2 ;
 int StatoBottoneBuzzer = 3;
@@ -59,12 +48,17 @@ int ledblu = 8;
   pinMode(ROSSO, OUTPUT);
   pinMode(buzzer,OUTPUT);
   pinMode(ledblu,OUTPUT);
+
+  //seriale 
   
+  Serial.begin(9600);
   
 }
 void loop(){
+
   if (StatoBottoneStart == HIGH) // se il bottone è premuto parte il gioco
   {
+    Serial.println("inizia il gioco");
     digitalWrite(VERDE,LOW);
     digitalWrite(ROSSO,LOW);
     digitalWrite(BLU,LOW);
@@ -79,7 +73,7 @@ void loop(){
       {
         
         digitalWrite(ledblu,LOW); // faccio terminare il ciclo
-        return TempoLed; // restituisco in output il tempo
+        Serial.println( TempoLed ); // restituisco in output il tempo
         
       }
     
@@ -100,18 +94,18 @@ void loop(){
     while(buzzer == HIGH)//finchè il buzzer è attivo sta nel ciclo
     {
       
-      if (StatoBuzzer == HIGH)// se il giocatore ha premuto il bottone
+      if (StatoBottoneBuzzer == HIGH)// se il giocatore ha premuto il bottone
       {
         
         digitalWrite(buzzer,LOW);// faccio terminare il ciclo
-        return TempoBuzzer;// restituisco in output il tempo
+        Serial.println( TempoBuzzer );// restituisco in output il tempo
         
       }
     
     else// se invece non è premuto 
     {
      
-      while(StatoBuzzer == LOW)// bottone non è premuto
+      while(StatoBottoneBuzzer == LOW)// bottone non è premuto
       {
         
         TempoBuzzer++; // incremento il tempo fino alla premuta del pulsante
