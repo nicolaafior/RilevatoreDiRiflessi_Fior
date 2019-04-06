@@ -1,40 +1,23 @@
 int TempoBuzzer;
 int TempoLed;
 
-//variabili che danno il tempo (random) che accendano il led ed il buzzer
 
-int CreazioneTempoAccensioneLed; 
-int CreazioneTempoAccensioneBuzzer;
-int StatoBottoneStart;
-int StatoBottoneLed;
-int StatoBottoneBuzzer;
-int buzzer;
-int VERDE;
-int BLU;
-int ROSSO;
-int ledblu;
+
+int CreazioneTempoAccensioneLed = random (1000,4000); 
+int CreazioneTempoAccensioneBuzzer = random (1000,4000); 
+int StatoBottoneStart = 13;
+int StatoBottoneLed = 2;
+int StatoBottoneBuzzer = 5;                   
+int buzzer = 7;
+int VERDE = 9;
+int BLU = 0;
+int ROSSO = 11;
+int ledblu = 3;
+
 
 void setup(){
-
-//pin a cui sarà collegato i pulsanti, buzzer ed i led 
-int StatoBottoneStart = 1;
-int StatoBottoneLed = 2 ;
-int StatoBottoneBuzzer = 3;
-int buzzer = 4;
-int VERDE = 5;
-int BLU = 6;
-int ROSSO = 7;
-int ledblu = 8;
-  // assegnamento valori del tempo
-  
-  TempoBuzzer = 0; // tempo iniziale parte da 0
-  TempoLed = 0; // tempo iniziale parte da 0
-  
-  // assegnamento valori random
-  
-  CreazioneTempoAccensioneLed = random (1000,4000); // do un valore random che sarà il delay prima dell'accensione
-  CreazioneTempoAccensioneBuzzer = random (1000,4000); // do un valore random che sarà il delay prima dell'accensione
-  
+  TempoLed=0;
+  TempoBuzzer=0;
   //Imposto gli input
   
   pinMode(StatoBottoneStart,INPUT);
@@ -49,16 +32,16 @@ int ledblu = 8;
   pinMode(buzzer,OUTPUT);
   pinMode(ledblu,OUTPUT);
 
-  //seriale 
   
   Serial.begin(9600);
-  
 }
-void loop(){
 
-  if (StatoBottoneStart == HIGH) // se il bottone è premuto parte il gioco
+void loop(){
+  
+  if (digitalRead(StatoBottoneStart) == HIGH) 
   {
-    Serial.println("inizia il gioco");
+    Serial.println ("Il gioco è iniziato" );
+    
     digitalWrite(VERDE,LOW);
     digitalWrite(ROSSO,LOW);
     digitalWrite(BLU,LOW);
@@ -66,65 +49,76 @@ void loop(){
     delay (CreazioneTempoAccensioneLed); //delay random
     digitalWrite(ledblu,HIGH); // accendo il led 
     
-    while(ledblu == HIGH) //finchè il led è attivo sta nel ciclo
+    while(digitalRead(ledblu) == HIGH) 
     {
-      
-      if (StatoBottoneLed == HIGH)// se il giocatore ha premuto il bottone
+   
+      if (digitalRead(StatoBottoneLed) == HIGH)
       {
         
-        digitalWrite(ledblu,LOW); // faccio terminare il ciclo
-        Serial.println( TempoLed ); // restituisco in output il tempo
+        digitalWrite(ledblu,LOW); 
+        Serial.println ("Il tempo del led è: " );
+        Serial.println (TempoLed); // restituisco in output il tempo
         
       }
-    
     else // se invece non è premuto 
     {
       
-      while(StatoBottoneLed == LOW) // bottone non è premuto
+      while(digitalRead(StatoBottoneLed) == LOW) 
       {
-        TempoLed++; // incremento il tempo fino alla premuta del pulsante
+        TempoLed++; 
+        delay(1);
       }
+      
     }
-  }
+    delay(100);
+    }
   delay (CreazioneTempoAccensioneBuzzer); //delay random
     
     digitalWrite(buzzer, HIGH);// attivo il buzzer
-    tone(buzzer,1000,100); // assegno l'intensità del suono
+ 
     
-    while(buzzer == HIGH)//finchè il buzzer è attivo sta nel ciclo
+    while(digitalRead(buzzer) == HIGH)
     {
-      
-      if (StatoBottoneBuzzer == HIGH)// se il giocatore ha premuto il bottone
+      if (digitalRead(StatoBottoneBuzzer) == HIGH)
       {
         
-        digitalWrite(buzzer,LOW);// faccio terminare il ciclo
-        Serial.println( TempoBuzzer );// restituisco in output il tempo
+        digitalWrite(buzzer,LOW);
+        Serial.println ("Il tempo del buzzer è: " );
+        Serial.println (TempoBuzzer);// restituisco in output il tempo
         
       }
     
     else// se invece non è premuto 
     {
      
-      while(StatoBottoneBuzzer == LOW)// bottone non è premuto
+      while(digitalRead(StatoBottoneBuzzer) == LOW)
       {
         
         TempoBuzzer++; // incremento il tempo fino alla premuta del pulsante
+        delay(1);
         }
         }
         }
         
-        if (TempoBuzzer < 500 && TempoLed < 500)
+        if (TempoBuzzer < 700 && TempoLed < 700)
         {
           
           digitalWrite(VERDE,HIGH);
+          Serial.println ("BRAVO !! BUON TEMPO !! " );
         }
         
         else{
-          
-          digitalWrite(ROSSO,HIGH);
+          Serial.println ("Riprovaci, puoi fare di meglio !! " );
+          digitalWrite(ROSSO,HIGH);\
         }
   }  
  }
+
+
+
+
+
+ 
 
 
 
